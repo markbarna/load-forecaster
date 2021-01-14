@@ -89,7 +89,7 @@ class TimeSeriesModel:
         return self.results_[area].predict(timestamp)
 
 
-def train(training_data_path: str, model_save_path: str, *args, **kwargs):
+def train_model(training_data_path: str, model_save_path: str, *args, **kwargs):
     """
 
     :param training_data_path:
@@ -97,7 +97,8 @@ def train(training_data_path: str, model_save_path: str, *args, **kwargs):
     :return:
     """
     model = TimeSeriesModel(ARIMA)
-    dataset = pd.concat((pd.read_parquet(file.path)) for file in os.scandir(training_data_path))
+    dataset = pd.concat((pd.read_parquet(file.path)) for file in os.scandir(training_data_path)
+                        if file.name.endswith('.parquet'))
     # convert index to a period index
     dataset = dataset.to_period(freq='600s')
     plot_series(dataset, model_save_path)

@@ -13,7 +13,7 @@ def format_source_data(source_path: str, *args, **kwargs):
     """
     # load and join tables
     logger.info(f"====== Loading raw data from {source_path} ======")
-    df = pd.concat((pd.read_csv(file.path)) for file in os.scandir(source_path))
+    df = pd.concat((pd.read_csv(file.path)) for file in os.scandir(source_path) if file.name.endswith('.csv'))
 
     # drop unused fields, encode data types
     df = df[['datetime_beginning_utc', 'area', 'instantaneous_load']]
@@ -29,8 +29,6 @@ def format_source_data(source_path: str, *args, **kwargs):
     # order columns so variable load data is first and categorical area variable is second
     df = df[['load', 'area']]
 
-    save_path = os.path.split(source_path)[0]
-    save_path = os.path.join(save_path, 'transformed')
-    df.to_parquet(os.path.join(save_path, 'training_data.parquet'), index=True)
+    df.to_parquet(os.path.join(source_path, 'training_data.parquet'), index=True)
     logger.info(f"====== ETL complete on {len(df)} samples "
                 f"from {df.index.min()} to {df.index.max()} ======")

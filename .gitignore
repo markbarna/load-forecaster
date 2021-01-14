@@ -131,6 +131,9 @@ dmypy.json
 # project-specific items
 TODO.md
 data/
+local_run/ml/
 
 # pycharm files
 .idea/
+
+.DS_Store
