@@ -22,8 +22,8 @@ class ModelPredictor(Predictor):
 
 if __name__ == '__main__':
     """
-    usage: sagemaker_deploy.py [-h] [-t TRAINING] [-o OUTPUT] [-e {local,S3}] [-r ROLE] image_uri
-
+    usage: sagemaker_deploy.py [-h] [-o OUTPUT] [-e {local,S3}] [-r ROLE] image_uri
+    
     Deploy load forecaster using Sagemaker
     
     positional arguments:
@@ -31,8 +31,6 @@ if __name__ == '__main__':
     
     optional arguments:
       -h, --help            show this help message and exit
-      -t TRAINING, --training TRAINING
-                            training data directory
       -o OUTPUT, --output OUTPUT
                             output path directory
       -e {local,S3}, --environment {local,S3}
@@ -41,7 +39,6 @@ if __name__ == '__main__':
     """
     arg_parser = ArgumentParser(description='Deploy load forecaster using Sagemaker')
     arg_parser.add_argument('image_uri', help='URI of the docker image')
-    arg_parser.add_argument('-t', '--training', default='training', help='training data directory'),
     arg_parser.add_argument('-o', '--output', default='', help='output path directory')
     arg_parser.add_argument(
         '-e', '--environment', default='local', choices=['local', 'S3'],
@@ -57,7 +54,6 @@ if __name__ == '__main__':
         instance_type = ''
         path_uri = 'S3'
     out_path = path_uri + '://' + args.output
-    train_path = path_uri + '://' + args.training
 
     model = Model(
         image_uri=args.image_uri,
@@ -66,4 +62,4 @@ if __name__ == '__main__':
         predictor_cls=ModelPredictor
     )
 
-    predictor = model.deploy(initial_instance_count=1, instance_type='local', endpoint_name='load-forecaster')
+    model.deploy(initial_instance_count=1, instance_type='local', endpoint_name='load-forecaster')
