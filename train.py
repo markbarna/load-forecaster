@@ -27,11 +27,22 @@ source_data_path = os.path.join(input_path, channel_name)
 
 
 def execute_pipeline(steps: Iterable[Callable], *args, **kwargs):
+    """
+    Assemble a pipeline and call each step in sequence.
+    :param steps: iterable of pipeline functions
+    :param args: arguments passed to the pipeline functions
+    :param kwargs: arguments passed to the pipeline functions
+    :return:
+    """
     for step in steps:
         step(*args, **kwargs)
 
 
 def run_training():
+    """
+    Run the pipeline with the data ETL and model training steps, passing in the data source and model save paths.
+    :return:
+    """
     # TODO: argparse hyparparms
     try:
         execute_pipeline(
