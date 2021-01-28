@@ -1,8 +1,6 @@
-#!/usr/bin/env python
-
-# This file implements the scoring service shell. You don't necessarily need to modify it for various
-# algorithms. It starts nginx and gunicorn with the correct configurations and then simply waits until
-# gunicorn exits.
+# Adapted from: https://github.com/aws/amazon-sagemaker-examples/tree/master/advanced_functionality/scikit_bring_your_own
+# This file implements the scoring service shell. It starts nginx and gunicorn with the correct configurations and
+# then simply waits until gunicorn exits.
 #
 # The flask server is specified to be the app object in wsgi.py
 #

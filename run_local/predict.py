@@ -1,3 +1,7 @@
+"""
+Script to get prediction from the running endpoint.
+"""
+
 import argparse
 import requests
 

@@ -1,3 +1,7 @@
+"""
+Data ETL step for the model training pipeline.
+"""
+
 import pandas as pd
 import os
 import logging
@@ -8,7 +12,7 @@ logger = logging.getLogger(__name__)
 def format_source_data(source_path: str, *args, **kwargs):
     """
     Load the load source csv files, join them, sort, and encode data fields
-    :param source_path:
+    :param source_path: file path to the input csv files
     :return:
     """
     # load and join tables

@@ -1,4 +1,3 @@
-# TODO: try a slimmmer configuration either with alpine or ubuntu + pyenv
 FROM python:3.8.7-slim-buster
 
 # gcc and python-dev required for installing sagemaker-train package

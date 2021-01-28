@@ -1,3 +1,7 @@
+"""
+Entrypoint to run the model etl and training pipeline.
+"""
+
 import logging
 import os
 from typing import Callable, Iterable

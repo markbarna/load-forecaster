@@ -2,7 +2,7 @@
 
 #    usage: sagemaker_deploy.py [-h] [-t TRAINING] [-o OUTPUT] [-e {local,S3}] [-r ROLE] image_uri
 #
-#    Train load forecaster using Sagemaker
+#    Deploy load forecaster using Sagemaker
 #
 #    positional arguments:
 #      image_uri             URI of the docker image

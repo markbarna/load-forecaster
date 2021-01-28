@@ -1,3 +1,10 @@
+"""
+Adapted from: https://github.com/aws/amazon-sagemaker-examples/tree/master/advanced_functionality/scikit_bring_your_own
+
+Implements the Flask application for serving the trained model to get predictions
+
+"""
+
 import joblib
 import flask
 from werkzeug.exceptions import BadRequest
@@ -45,9 +52,14 @@ def ping():
 
 @app.route('/invocations', methods=['POST'])
 def transformation():
-    """Do an inference on a single batch of data. In this sample server, we take data as CSV, convert
-    it to a pandas data frame for internal use and then convert the predictions back to CSV (which really
-    just means one prediction per line, since there's a single column.
+    """
+    Run model inference. The input expected is a json string of the format:
+    {
+        "date": "2021-02-1",
+        "time": "12:00",
+        "area": "PEP"
+    }
+    The prediction is returned as a string indicating the area load prediction.
     """
     logger.info(f'content type received: {flask.request.content_type}')
     try:

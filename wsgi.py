@@ -1,7 +1,8 @@
-import inference_handler as myapp
+"""
+Adapted from https://github.com/aws/amazon-sagemaker-examples/tree/master/advanced_functionality/scikit_bring_your_own
+This is a wrapper for gunicorn to find the flask app
+"""
 
-# This is just a simple wrapper for gunicorn to find your app.
-# If you want to change the algorithm file, simply change "predictor" above to the
-# new file.
+import inference_handler as myapp
 
 app = myapp.app

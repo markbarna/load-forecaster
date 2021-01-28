@@ -1,3 +1,7 @@
+"""
+Deploy the trained model using SageMaker.
+"""
+
 from sagemaker.model import Model
 from sagemaker.predictor import Predictor
 from sagemaker.deserializers import StringDeserializer
@@ -20,7 +24,7 @@ if __name__ == '__main__':
     """
     usage: sagemaker_deploy.py [-h] [-t TRAINING] [-o OUTPUT] [-e {local,S3}] [-r ROLE] image_uri
 
-    Train load forecaster using Sagemaker
+    Deploy load forecaster using Sagemaker
     
     positional arguments:
       image_uri             URI of the docker image
@@ -35,7 +39,7 @@ if __name__ == '__main__':
                             run image locally (requires docker) (default) or in S3
       -r ROLE, --role ROLE  AWS role ARN
     """
-    arg_parser = ArgumentParser(description='Train load forecaster using Sagemaker')
+    arg_parser = ArgumentParser(description='Deploy load forecaster using Sagemaker')
     arg_parser.add_argument('image_uri', help='URI of the docker image')
     arg_parser.add_argument('-t', '--training', default='training', help='training data directory'),
     arg_parser.add_argument('-o', '--output', default='', help='output path directory')

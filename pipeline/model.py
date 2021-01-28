@@ -1,3 +1,8 @@
+"""
+Pipeline step to run the model training and generate diagnostic plots.
+"""
+
+
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.statespace.mlemodel import MLEModel
 from typing import ClassVar
@@ -14,9 +19,10 @@ logger = logging.getLogger(__name__)
 
 def plot_series(dataset: pd.DataFrame, model_save_path: str):
     """
-
-    :param dataset:
-    :param model_save_path:
+    Plot diagnostic images of the stats model amd the time series data.
+    :param dataset: expects a DataFrame with a DatetimeIndex, the first column numerical data,
+        and the second column a category
+    :param model_save_path: local of the model for saving the plots
     :return:
     """
     logger.info("====== Generating interesting plots of the time series =====")
@@ -55,8 +61,9 @@ class TimeSeriesModel:
 
     def __init__(self, model_class: ClassVar[MLEModel]):
         """
-
-        :param model_class:
+        Wrapper to hold a statsmodels (https://www.statsmodels.org/stable/index.html) time series model, where one model
+        is fit for each level of a categorical variable.
+        :param model_class: statsmodels MLEModel class object
         """
         self._m = model_class
         self.fitted_ = dict()
@@ -64,8 +71,9 @@ class TimeSeriesModel:
 
     def fit_best_model(self, training_data: pd.DataFrame):
         """
-
-        :param training_data:
+        Find best model by fitting multiple models using search space of parameters.
+        :param training_data: expects a DataFrame with a DatetimeIndex, the first column numerical data,
+        and the second column a category
         :return:
         """
         # TODO: model training on parameter space
@@ -77,13 +85,13 @@ class TimeSeriesModel:
             print(f'====== Results for variable {grouper}, level {category} ======')
             print(self.results_[category].summary())
 
-    def predict(self, date: str, time: str, area: str):
+    def predict(self, date: str, time: str, area: str) -> pd.Series:
         """
-
-        :param date:
-        :param time:
-        :param area:
-        :return:
+        Get the model's load forecast in megawatts
+        :param date: date (must be later than training data), e.g. 2021-02-01
+        :param time: time (HH:MM) 24-hr format
+        :param area: PJM area zone
+        :return: load forecast
         """
         timestamp = pd.Timestamp(f'{date} {time}:00')
         return self.results_[area].predict(timestamp)
@@ -91,9 +99,11 @@ class TimeSeriesModel:
 
 def train_model(training_data_path: str, model_save_path: str, *args, **kwargs):
     """
-
-    :param training_data_path:
-    :param model_save_path:
+    Run model training and plotting of trained models.
+    :param training_data_path: path to input data. expects a parquet file with a DatetimeIndex,
+        the first column numerical data,
+        and the second column a category
+    :param model_save_path: path to save the trained model binary
     :return:
     """
     model = TimeSeriesModel(ARIMA)

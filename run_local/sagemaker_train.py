@@ -1,3 +1,6 @@
+"""
+Train the model using SageMaker
+"""
 from sagemaker.estimator import Estimator
 from argparse import ArgumentParser
 
