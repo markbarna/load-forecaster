@@ -7,7 +7,7 @@ import os
 from typing import Callable, Iterable
 import traceback
 
-from pipeline.etl import format_source_data
+from pipeline.etl import format_source_data, seasonal_difference
 from pipeline.model import train_model
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s')
@@ -45,10 +45,11 @@ def run_training():
     # TODO: argparse hyparparms
     try:
         execute_pipeline(
-            (format_source_data, train_model),
+            (format_source_data, seasonal_difference, train_model),
             source_path=source_data_path,
             training_data_path=source_data_path,
-            model_save_path=model_path
+            model_save_path=model_path,
+            season_len=12
         )
     except Exception as e:
         with open(os.path.join(output_path, 'failure'), 'w') as f:

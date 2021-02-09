@@ -36,3 +36,20 @@ def format_source_data(source_path: str, *args, **kwargs):
     df.to_parquet(os.path.join(source_path, 'training_data.parquet'), index=True)
     logger.info(f"====== ETL complete on {len(df)} samples "
                 f"from {df.index.min()} to {df.index.max()} ======")
+
+
+def seasonal_difference(source_path: str, season_len: int, *args, **kwargs):
+    """
+    Add a column to the source data with seasonal differenced time series.
+    :param source_path: file path to the training data file
+    :param season_len: number of periods in the season
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    logger.info(f'====== Seasonal Differencing, periods per season: {season_len} ======')
+    df = pd.read_parquet(os.path.join(source_path, 'training_data.parquet'))
+    diffed = df.groupby('area').diff(periods=season_len)
+    df = df.join(diffed.rename(columns={'load': 'load_diffed'}))
+
+    df.to_parquet(os.path.join(source_path, 'training_data.parquet'), index=True)
