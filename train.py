@@ -16,14 +16,13 @@ logger = logging.getLogger(__name__)
 # sagemaker-specific paths
 prefix = os.getenv('ROOT_PATH', '/opt/ml')
 
-# TODO: Update to ENV vars
-input_path = os.path.join(prefix, 'input', 'data')
-output_path = os.path.join(prefix, 'output')
-model_path = os.path.join(prefix, 'model')
-param_path = os.path.join(prefix, 'input/config/hyperparameters.json')
+input_path = os.getenv('SM_INPUT_DIR', os.path.join(prefix, 'input', 'data'))
+output_path = os.getenv('SM_OUTPUT_DATA_DIR', os.path.join(prefix, 'output'))
+model_path = os.getenv('SM_MODEL_DIR', os.path.join(prefix, 'model'))
+param_path = os.getenv('SM_INPUT_CONFIG_DIR', os.path.join(prefix, 'input', 'config'))
 # channel name for raw input training data
-channel_name = 'training'
-source_data_path = os.path.join(input_path, channel_name)
+training_channel = os.getenv('SM_CHANNEL_TRAINING', 'training')
+source_data_path = os.path.join(input_path, training_channel)
 
 
 def execute_pipeline(steps: Iterable[Callable], *args, **kwargs):
