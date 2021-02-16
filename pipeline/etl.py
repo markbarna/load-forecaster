@@ -49,7 +49,14 @@ def seasonal_difference(source_path: str, season_len: int, *args, **kwargs):
     """
     logger.info(f'====== Seasonal Differencing, periods per season: {season_len} ======')
     df = pd.read_parquet(os.path.join(source_path, 'training_data.parquet'))
-    diffed = df.groupby('area').diff(periods=season_len)
-    df = df.join(diffed.rename(columns={'load': 'load_diffed'}))
+    diffed = df.pivot(columns='area').diff(periods=season_len)['load']
+    # drop first iteration of the season since it will be Na
+    diffed = diffed.dropna()
+
+    # reshape data into tall format
+    df = diffed.unstack()
+    df = df.reset_index(level='area')
+    df = df.rename(columns={0: 'load'})
+    df = df[['load', 'area']]
 
     df.to_parquet(os.path.join(source_path, 'training_data.parquet'), index=True)

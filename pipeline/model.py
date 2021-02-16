@@ -25,6 +25,7 @@ def plot_series(dataset: pd.DataFrame, model_save_path: str):
     :param model_save_path: local of the model for saving the plots
     :return:
     """
+    # TODO: parameterize this function to make it more flexible
     logger.info("====== Generating interesting plots of the time series =====")
     y_var = dataset.columns[0]
     hue_var = dataset.columns[-1]
