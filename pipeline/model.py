@@ -7,12 +7,15 @@ from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.statespace.mlemodel import MLEModel
 from typing import ClassVar
 import pandas as pd
+import optuna
 import os
 import joblib
 import logging
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+from pipeline.optimize import Objective
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +84,10 @@ class TimeSeriesModel:
         logger.info(f"====== Fitting {self._m} model on training data ======")
         grouper = training_data.columns[1]
         for category, df in training_data.groupby(grouper):
+            study = optuna.create_study(study_name=self._m, direction='minimize')
+            objective = Objective(self._m, df.iloc[:, 0])
+            # TODO: add pruner
+            study.optimize(objective.minimize, n_trials=10)
             self.fitted_[category] = self._m(df.iloc[:, 0], order=(1,1,1))
             self.results_[category] = self.fitted_[category].fit()
             print(f'====== Results for variable {grouper}, level {category} ======')
